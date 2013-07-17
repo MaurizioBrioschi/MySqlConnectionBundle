@@ -20,10 +20,12 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('ridesoft_my_sql_connection');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
-
+        $rootNode->children()
+                ->scalarNode('username')->defaultValue('')->end()
+                ->scalarNode('password')->defaultValue('')->end()
+                ->scalarNode('dbname')->defaultValue('')->end()
+                ->scalarNode('host')->defaultValue('')->end()
+            ->end();
         return $treeBuilder;
     }
 }

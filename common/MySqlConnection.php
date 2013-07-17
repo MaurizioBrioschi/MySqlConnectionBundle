@@ -24,11 +24,11 @@ class MySqlConnection {
      * @param string $password
      * @param string $db 
      */
-    private function __construct($server, $username, $password, $db) {
-        $this->server = $server;
+    public function __construct($host, $username, $password, $dbname) {
+        $this->server = $host;
         $this->username = $username;
         $this->password = $password;
-        $this->db = $db;
+        $this->db = $dbname;
         $this->connect();
     }
 

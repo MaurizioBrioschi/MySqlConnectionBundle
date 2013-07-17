@@ -24,5 +24,9 @@ class ridesoftMySqlConnectionExtension extends Extension
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
+        $container->setParameter('username', $config['username']);
+        $container->setParameter('password', $config['password']);
+        $container->setParameter('dbname', $config['dbname']);
+        $container->setParameter('host', $config['host']);
     }
 }
