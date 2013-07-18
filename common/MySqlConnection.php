@@ -24,7 +24,7 @@ class MySqlConnection {
     protected static $myConnection;
 
     /**
-     * 
+     * constructor
      * @param string $server
      * @param string $username
      * @param string $password
@@ -40,7 +40,7 @@ class MySqlConnection {
     }
 
     /**
-     * connette ad un db mysql
+     * connect to my sql db
      */
     private function connect() {
         $this->link = mysql_connect($this->server, $this->username, $this->password, true) or die("Impossible to connect to mySql DB: " . mysql_error());
@@ -73,7 +73,9 @@ class MySqlConnection {
         echo 'connection already exist!';
         trigger_error('Clone is not allowed.', E_USER_ERROR);
     }
-
+    /**
+     * close connection
+     */
     public function close() {
         mysql_close($this->link);
     }
@@ -94,7 +96,7 @@ class MySqlConnection {
     }
 
     /*
-     * Inizia una transazione
+     * Inizialize a transaction
      */
 
     function beginTransaction() {
@@ -103,7 +105,7 @@ class MySqlConnection {
     }
 
     /*
-     * Esegue una commit
+     * commit transaction
      */
 
     function CommitTransaction() {
@@ -111,7 +113,7 @@ class MySqlConnection {
     }
 
     /*
-     * Esegue un rollback
+     * roll back transaction
      */
 
     function RollBackTransaction() {
@@ -119,7 +121,7 @@ class MySqlConnection {
     }
 
     /*
-     * Ritorna una riga di un record set
+     * get a recordset row
      * @param array $result
      * @param int $i
      */
@@ -132,7 +134,7 @@ class MySqlConnection {
     }
 
     /*
-     * Ritorna il numero field di un recordset
+     * get numbers of fields
      * @param array $result
      */
 
@@ -140,8 +142,27 @@ class MySqlConnection {
         return @mysql_num_fields($result);
     }
 
-    public function cleanField($field) {
-        return str_replace("'", "''", $field);
+    /**
+     * clean field for db query
+     * @param type $field
+     * @return type
+     */
+    public function cleanField($field)	{
+        $field = addslashes($field);
+        if (!get_magic_quotes_gpc()) {
+            $field = stripslashes($field);
+        }
+
+        $field = mysql_real_escape_string($field);
+        return $field;
+    }
+    /**
+     * return the error 
+     * @param string $msg
+     */
+    public function LogError($msg)  {
+        $e->error_get_last();
+        return $msg."->".$e["message"];
     }
 
 }
