@@ -58,16 +58,18 @@ class DBRepository {
             return $this->connection->exeSQL($SQL);
         } catch (Exception $e) {
             return $this->connection->LogError("DBRepository->genericInsert($table)->$SQL");
+            return false;
         }
     }
 
     /**
-     * do an insert $table with $array parameters
+     * do an insert $table with $array parameters and return is $keyField
      * @param string $table
      * @param string $array
+     * @param string $keyField
      * @return int
      */
-    public function Insert($table, $array) {
+    public function Insert($table, $array, $keyField = "id") {
         $SQL = "INSERT INTO $table(";
         foreach (array_keys($array) as $key) {
             $SQL .= $key . ",";
@@ -88,12 +90,13 @@ class DBRepository {
 
         try {
             $this->connection->exeSQL($SQL);
-            $SQL = "select max(id) as id FROM $table;";
+            $SQL = "select max($keyField) as id FROM $table;";
             list($dbd, $i) = $this->connection->exeSQL($SQL);
             $recordset = $this->connection->getResult($dbd, 0);
             return intval($recordset["id"]);
         } catch (Exception $e) {
             return $this->connection->LogError("DBRepository->genericInsert($table)->$SQL");
+            return 0;
         }
     }
 
@@ -123,22 +126,26 @@ class DBRepository {
             $this->connection->exeSQL($SQL);
             return true;
         } catch (Exception $e) {
-            return $this->connection->LogError("DBRepository->genericInsert($table)->$SQL");
+            return $this->connection->LogError("DBRepository->Update($table)->$SQL");
+            return false;
         }
     }
 
     /**
-     * make mysql db dump
-     * @param type $user
-     * @param type $pwd
-     * @param type $db
-     * @param type $pathTo
+     * Delete a record in $table have $keyValue like $keyField
+     * @param type $table
+     * @param type $keyValue
+     * @param type $keyField
+     * @return boolean
      */
-    public function dumpDb($user, $pwd, $db, $pathTo) {
+    public function Delete($table, $keyValue, $keyField = "id") {
+        $SQL = "DELETE FROM $table WHERE $keyField = $keyValue;";
         try {
-            exec("mysqldump -u$user -p$pwd $db > $pathTo");
+            $this->connection->exeSQL($SQL);
+            return true;
         } catch (Exception $e) {
-            die($e->getMessage());
+            $this->connection->LogError("DBRepository->Delete($table,$keyValue, $keyField)->$SQL");
+            return false;
         }
     }
 
