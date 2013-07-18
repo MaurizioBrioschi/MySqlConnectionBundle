@@ -11,16 +11,33 @@
 
 namespace ridesoft\MySqlConnectionBundle\common;
 
+use ridesoft\MySqlConnectionBundle\common\MySqlConnection;
+
 class DBRepository {
-
+    protected static $DBRepository;
+    
     private $connection;
-
+    
     /**
      * Constructor
      * @param MySqlConnection $DBConnection
      */
-    public function __construct(ridesoft\MySqlConnectionBundle\MySqlConnection $DBConnection) {
+    public function __construct(MySqlConnection $DBConnection) {
         $this->connection = $DBConnection;
+    }
+
+    /**
+     * Singleton for inizialize repository class
+     * @param MySqlConnection $DBConnection
+     * @return $this
+     */
+    public static function Inizialize(MySqlConnection $DBConnection) {
+        /*         * load configuration */
+        if (!isset(self::$DBRepository)) {
+            $c = __CLASS__;
+            self::$DBRepository = new $c($DBConnection);
+        }
+        return self::$DBRepository;
     }
 
     /**
@@ -32,12 +49,25 @@ class DBRepository {
     }
 
     /**
+     * execute a query 
+     * @param string $query
+     * @return list($dbd,$i) where $dbd is the recordset and i the number of rows 
+     */
+    public function select($SQL) {
+        try {
+            return $this->connection->exeSQL($SQL);
+        } catch (Exception $e) {
+            return $this->connection->LogError("DBRepository->genericInsert($table)->$SQL");
+        }
+    }
+
+    /**
      * do an insert $table with $array parameters
      * @param string $table
      * @param string $array
      * @return int
      */
-    public function genericInsert($table, $array) {
+    public function Insert($table, $array) {
         $SQL = "INSERT INTO $table(";
         foreach (array_keys($array) as $key) {
             $SQL .= $key . ",";
@@ -75,7 +105,7 @@ class DBRepository {
      * @param string $keyField
      * @return boolean
      */
-    public function genericUpdate($table, $array, $keyValue, $keyField = "id") {
+    public function Update($table, $array, $keyValue, $keyField = "id") {
         $SQL = "UPDATE $table SET ";
         foreach (array_keys($array) as $key) {
             $SQL .= $key . "='";

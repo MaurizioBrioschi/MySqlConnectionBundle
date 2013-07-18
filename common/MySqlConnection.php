@@ -11,6 +11,12 @@
 
 namespace ridesoft\MySqlConnectionBundle\common;
 
+use ridesoft\MySqlConnectionBundle\DependencyInjection\Configuration;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\DependencyInjection\Loader;
+
 class MySqlConnection {
 
     protected $link;
@@ -30,22 +36,7 @@ class MySqlConnection {
         $this->password = $password;
         $this->db = $dbname;
         $this->connect();
-    }
-
-    /**
-     * istanzia una connessione ad un db mysql, attraverso il pattern singleton garantisce che ve ne sia una sola
-     * @param string $server
-     * @param string $username
-     * @param string $password
-     * @param stribng $db
-     * @return MySqlConnection 
-     */
-    public static function Connection($server, $username, $password, $db) {
-        if (!isset(self::$myConnection)) {
-            $c = __CLASS__;
-            self::$myConnection = new $c($server, $username, $password, $db);
-        }
-        return self::$myConnection;
+        return $this;
     }
 
     /**
