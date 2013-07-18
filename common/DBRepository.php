@@ -14,10 +14,10 @@ namespace ridesoft\MySqlConnectionBundle\common;
 use ridesoft\MySqlConnectionBundle\common\MySqlConnection;
 
 class DBRepository {
+
     protected static $DBRepository;
-    
     private $connection;
-    
+
     /**
      * Constructor
      * @param MySqlConnection $DBConnection

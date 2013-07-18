@@ -73,6 +73,7 @@ class MySqlConnection {
         echo 'connection already exist!';
         trigger_error('Clone is not allowed.', E_USER_ERROR);
     }
+
     /**
      * close connection
      */
@@ -147,7 +148,7 @@ class MySqlConnection {
      * @param type $field
      * @return type
      */
-    public function cleanField($field)	{
+    public function cleanField($field) {
         $field = addslashes($field);
         if (!get_magic_quotes_gpc()) {
             $field = stripslashes($field);
@@ -156,16 +157,16 @@ class MySqlConnection {
         $field = mysql_real_escape_string($field);
         return $field;
     }
+
     /**
      * return the error 
      * @param string $msg
      */
-    public function LogError($msg)  {
+    public function LogError($msg) {
         $e->error_get_last();
-        return $msg."->".$e["message"];
+        return $msg . "->" . $e["message"];
     }
 
 }
-
 
 ?>
