@@ -167,5 +167,5 @@ class MySqlConnection {
 
 }
 
-//SqlConnectionClass
+
 ?>
