@@ -11,7 +11,15 @@ You can connect to mysql using service mysqlconnection or thown DBRepository cla
 
 Configure
 =======
+```php
+    //config.yml
+    my_sql_connection:
+        username: myusr
+        password: mypwd
+        dbname: boiler
+        host: localhost
 
+  ```
 
 How to use
 =======
