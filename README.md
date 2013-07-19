@@ -16,7 +16,7 @@ Configure
     my_sql_connection:
         username: myusr
         password: mypwd
-        dbname: boiler
+        dbname: mydatabase
         host: localhost
 
   ```
