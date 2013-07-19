@@ -60,7 +60,42 @@ this example is for an update
 ... for other functions look into the class
 You can extend this class and create your own repository for your objects using this useful functuion
 
+## Create your own repository
+```php
+<?php
 
+...
+use ridesoft\MySqlConnectionBundle\common\MySqlConnection;
+use ridesoft\MySqlConnectionBundle\common\DBRepository;
+
+class TestRepository extends DBRepository{
+    protected static $TestRepository;
+    
+    public static function Inizialize(MySqlConnection $DBConnection) {
+        /*         * load configuration */
+        if (!isset(self::$TestRepository)) {
+            $c = __CLASS__;
+            self::$TestRepository = new $c($DBConnection);
+        }
+        return self::$TestRepository;
+    }
+    
+    public function getUsers() {
+        return $this->Select("SELECT * FROM tblusers");
+    }
+}
+?>
+ ```
+.. now use your repository:
+```php
+      ...
+      
+      $repository = TestRepository::Inizialize($this->get('MySqlConnection'));
+      list($dbd,$i) = $repository->getUsers();
+      $recordset = $repository->getConnection->getResult($dbd,0);
+      
+
+  ```
 License
 =======
 
